@@ -1,30 +1,32 @@
 import pygame
 import math
+
 import pcShip
 import Shell
+import Planets
+import Stars
 
-class Moon(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("moon-1.png")
-        self.image = self.image.convert_alpha()
-        self.rect = self.image.get_rect()
-        self.rect.center = (600, 350)
-    def update(self):
-        self.rect.center = (600, 350)
-
+"""
+more of a prototype than a real game engine.
+Has potential, though
+"""
 def main():
+    currLocation = 0;
     screen = pygame.display.set_mode((1200, 700))
     pygame.display.set_caption("Star Cutter")
 
-    background = pygame.Surface(screen.get_size())
-    background.fill((0, 0, 0))
+    starField = Stars.Stars(screen)
+    starField.update()
+
+    screen.blit(starField.background, (0,0))
+
+    locations = [Planets.Earth(), Planets.Moon(), Planets.Mars(), Planets.Space()]
 
     ship = pcShip.Cutter(screen)
     shell = Shell.Shell(screen)
-    moon = Moon()
-    allSprites = pygame.sprite.Group(moon, ship, shell)
-
+    currentPlanet = locations[ship.location]
+    planetSprites = pygame.sprite.Group(currentPlanet)
+    allSprites = pygame.sprite.Group(ship, shell)
 
     clock = pygame.time.Clock()
     keepGoing = True
@@ -45,10 +47,18 @@ def main():
                 elif event.key == pygame.K_SPACE:
                     shell.fire( ship )
 
-        allSprites.clear(screen, background)
+        planetSprites.clear(screen, starField.background)
+        allSprites.clear(screen, starField.background)
+
+        planetSprites.remove(currentPlanet)
+
+        currentPlanet = locations[ship.location]
+        planetSprites.add(currentPlanet)
+        planetSprites.update()
+        planetSprites.draw(screen)
+
         allSprites.update()
         allSprites.draw(screen)
-
 
         pygame.display.flip()
 

@@ -9,7 +9,7 @@ class Cutter(pygame.sprite.Sprite):
 
         self.image = self.imgList[0]
         self.rect = self.image.get_rect()
-
+        self.location = 0
         self.x = self.rect.centerx
         self.y = self.rect.centery
         self.dir = 0
@@ -109,7 +109,6 @@ class Cutter(pygame.sprite.Sprite):
         if self.speed < -3:
             self.speed = -3
 
-
     def checkBounds(self):
         screen = self.screen
         if self.y > screen.get_height():
@@ -118,6 +117,8 @@ class Cutter(pygame.sprite.Sprite):
             self.y = screen.get_height()
         if self.x > screen.get_width():
             self.x = 0
+            self.location = 0 if self.location == 3 else self.location + 1
         if self.x < 0:
             self.x = screen.get_width()
+            self.location = self.location - 1 if self.location > 0 else 3
 
