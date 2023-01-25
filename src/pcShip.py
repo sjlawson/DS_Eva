@@ -84,7 +84,7 @@ class Cutter(pygame.sprite.Sprite):
             self.dy = .7
             self.currentImage = 3
         else:
-            print "something went wrong here"
+            print("something went wrong here")
 
         self.dx *= self.speed
         self.dy *= self.speed
@@ -121,4 +121,3 @@ class Cutter(pygame.sprite.Sprite):
         if self.x < 0:
             self.x = screen.get_width()
             self.location = self.location - 1 if self.location > 0 else 3
-
